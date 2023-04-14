@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Project v2</title>
+    <script src="./assets/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./assets/angular/angular.min.js"></script>
+    <link rel="stylesheet" href="./assets/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/styles.css">
+</head>
+<body>
+    <div class="p-3 bg-primary text-light">
+        <h3>LOGIN</h3>
+    </div>
+    <div class="container mt-5 shadow rounded w-25 p-3">
+        <div class="p-5">
+            <form action="/login" method="POST">
+                <label><b>USERNAME</b></label>
+                <input name="username" type="text" class="username form-control"placeholder="Username" required><br>
+                <label><b>PASSWORD</b></label>
+                <input name="password" type="password" class="password form-control mt-3 mb-5" placeholder="Password" required>
+                <button type="submit" class="bg-primary text-light form-control">LOGIN</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

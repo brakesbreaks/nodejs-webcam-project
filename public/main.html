@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Project v2</title>
+    <script src="./assets/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./assets/angular/angular.min.js"></script>
+    <script type="text/javascript" src="./assets/webcamjs/webcam.min.js"></script>
+    <link rel="stylesheet" href="./assets/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./assets/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <style>
+        #my_camera{
+            width:320px;
+            height:240px;
+            border:1px solid #c0c0c0;
+        }
+    </style>
+</head>
+<body ng-app="app">
+    <nav>
+        <div class="container-fluid bg-primary d-flex justify-content-between align-items-center p-4 fixed-top">
+            <a class="navbar-brand fs-4 text-light me-3 fw-bold">Student Information Table</a>
+        </div>
+    </nav>
+    <br><br>
+    <main>
+        <!-- STUDENT/ADD MODAL -->
+        <section>
+            <div class="studentModal modal modal-l fade" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="row align-items-center">
+                                <div class="container">
+                                    <div class="d-flex justify-content-center">
+                                        <div id="my_camera"></div>
+                                    </div>
+                                    <div class="d-flex justify-content-center mt-3">
+                                        <button class="capture btn btn-dark me-3 bi bi-camera-fill"></button>
+                                        <button class="reset btn btn-dark fa fa-undo">Retake</button>
+                                        <button class="upload btn btn-dark mx-3 bi bi-cloud-upload"> Upload</button>
+                                    </div>
+                                    <br><br>
+                                    <input class="idno form-control mb-3" type="text" name="idno" placeholder="Idno" required>
+                                    <input class="lastname form-control mb-3" type="text" name="lastname" placeholder="Lastname" required>
+                                    <input class="firstname form-control" type="text" name="firstname" placeholder="Firstname" required>
+                                    <div class="d-flex justify-content-center my-3">
+                                        <label for="course">Course</label>
+                                        <select class="course form-select ms-3" name="course">
+                                            <option value="BSIT">BSIT</option>
+                                            <option value="ACT">ACT</option>
+                                            <option value="BSCS">BSCS</option>
+                                            <option value="BSCPE">BSCPE</option>
+                                        </select>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <label for="level">Year</label>
+                                        <select class="level form-select ms-3" name="level">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- UPDATE STUDENT MODAL -->
+        <section>
+            <div class="updateStudentModal modal fade" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content" ng-controller="updateStudent">
+                        <div class="modal-body">
+                            <div class="d-flex justify-content-center">
+                                <img class="rounded img-fluid" src="{{ image }}" alt="">
+                            
+                            </div>
+                            <div class="d-flex justify-content-center my-3">
+                                <input class="form-control" type="text" name="idno" ng-model="idno" disabled>
+                            </div>
+                            <div class="d-flex justify-content-center my-3">
+                                <input class="form-control" type="text" name="lastname" ng-model="lastname" placeholder="Lastname">
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <input class="form-control" type="text" name="firstname" ng-model="firstname" placeholder="Firstname">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center my-3">
+                                <label for="course">Course</label>
+                                <select class="ms-3 form-select" ng-model="selectedCourse" ng-options="studentCourse for studentCourse in courses" id="course"></select>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <label for="level">Year</label>
+                                <select class="ms-3 form-select" ng-model="selectedLevel" ng-options="studentLevel for studentLevel in levels" id="level"></select>
+                            </div>
+                            <div class="d-flex justify-content-center mt-3">
+                                <button type="submit" class="btn btn-warning" ng-click="updateStudent()">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-5">
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn bg-white me-2 bi bi-database-fill-add shadow" data-bs-toggle="modal" data-bs-target=".studentModal"> ADD STUDENT</button>
+                <form action="/" method="GET">
+                    <button type="submit" class="btn btn-white bi bi-door-closed shadow"> Log Out</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Student List/Table-->
+        <section class="mt-5" ng-controller="studentList">
+            <div ng-style="setDisplay">
+                <table class="table table-striped text-center shadow">
+                    <thead>
+                        <tr class="table border">
+                            <th ng-repeat="h in header">{{ h | uppercase }}</th>
+                        </tr>
+                    <tbody>
+                        <tr ng-repeat="student in students">
+                            <td>{{ student.idno }}</td>
+                            <td>{{ student.lastname | uppercase }}</td>
+                            <td>{{ student.firstname | uppercase }}</td>
+                            <td>{{ student.course }}</td>
+                            <td>{{ student.level }}</td>
+                            <td>
+                                <button class="btn btn-warning bg-primary" data-bs-toggle="modal" data-bs-target=".updateStudentModal" ng-click="updateStudent(student.idno,student.image,student.firstname,student.lastname)"><i class="bg-primary bi bi-pencil-square"></i></button>
+                                <button class="btn btn-danger" ng-click="remove(student.idno)">&times;</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    </thead>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+<script src="./assets/js/main.js"></script>
+</html>
